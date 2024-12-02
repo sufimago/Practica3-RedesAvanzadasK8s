@@ -13,18 +13,33 @@ spec:
         app: mysql
     spec:
       containers:
-        - name: mysql
-          image: mysql:8.0
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: "pro-pass"
-            - name: MYSQL_DATABASE
-              value: "pro.db"
-          ports:
-            - containerPort: 3306
-          volumeMounts:
-            - name: mysql-data
-              mountPath: /var/lib/mysql
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "pro-pass"
+        - name: MYSQL_DATABASE
+          value: "pro.db"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql  # Carpeta donde MySQL guarda datos
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql-pvc  # Referencia a un PVC
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  # Tamaño del almacenamiento
 ---
 apiVersion: v1
 kind: Service
@@ -34,7 +49,7 @@ spec:
   selector:
     app: mysql
   ports:
-    - protocol: TCP
-      port: 3306
-      targetPort: 3306
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
   type: ClusterIP
