@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    events {}
+
+    http {
+        server {
+            listen 80;
+            server_name localhost;
+
+            root /usr/share/nginx/html;
+            index index.php index.html index.htm;
+
+            location / {
+                try_files $uri $uri/ =404;
+            }
+
+            # Soporte para archivos PHP
+            location ~ \.php$ {
+                include fastcgi_params;
+                fastcgi_pass php-fpm-service:9000;  # Nombre del servicio de PHP
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            }
+        }
+    }
