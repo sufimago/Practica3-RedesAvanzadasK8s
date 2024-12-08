@@ -1,14 +1,18 @@
-FROM php:8.0-fpm
+# Usar una imagen base de PHP con Apache
+FROM php:8.1-apache
 
-# Instalar dependencias necesarias
-RUN apt-get update && apt-get install -y \
-    libpng-dev libjpeg-dev libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd mysqli
+# Instalar extensiones necesarias para MySQL
+RUN docker-php-ext-install mysqli
 
-# Comprobar si la extensión Redis ya está instalada, si no, instalarla
-RUN if ! php -m | grep -q 'redis'; then \
-      pecl install redis && docker-php-ext-enable redis; \
-    else \
-      echo "Redis ya está instalado"; \
-    fi
+# Copiar los archivos de la aplicación al contenedor
+COPY . /var/www/html/
+
+# Configurar permisos
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
+
+# Exponer el puerto 80
+EXPOSE 80
+
+# Activar el módulo de reescritura de Apache
+RUN a2enmod rewrite

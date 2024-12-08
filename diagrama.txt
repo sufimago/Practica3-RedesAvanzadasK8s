@@ -1,0 +1,17 @@
+.
+├── k8s/
+│   ├── mysql-deployment.yaml
+│   ├── phpmyadmin-deployment.yaml
+│   ├── nginx-deployment.yaml
+│   ├── php-fpm-deployment.yaml
+│   ├── redis-deployment.yaml
+│   ├── nginx-configmap.yaml
+│   ├── persistent-volume-claims.yaml
+│   ├── mysql-secret.yaml
+│   └── k8s-app-config/
+│       ├── web/
+│       │   ├── index.php
+│       │   ├── db.php
+│       │   └── config.php
+│       └── nginx.conf
+└── Dockerfile

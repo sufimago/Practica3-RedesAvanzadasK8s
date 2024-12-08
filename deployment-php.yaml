@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+      - name: php
+        image: php:7.4-fpm # Usamos una imagen de PHP con FPM (FastCGI Process Manager)
+        ports:
+        - containerPort: 9000 # Asegúrate de que PHP-FPM está escuchando en el puerto 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-service
+spec:
+  ports:
+  - port: 9000 # Asegúrate de que el servicio PHP esté escuchando en el puerto 9000
+  selector:
+    app: php
