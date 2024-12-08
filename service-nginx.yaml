@@ -9,4 +9,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-  type: ClusterIP
+      nodePort: 30080 
+  type: NodePort # para que pueda acceder desde el servicio, sino daba problemas, y solo lo podia hacer con el forward

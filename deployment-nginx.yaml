@@ -13,13 +13,13 @@ spec:
         app: nginx
     spec:
       containers:
-        - name: nginx
-          image: nginx:latest
-          volumeMounts:
-            - name: nginx-config
-              mountPath: /etc/nginx/nginx.conf
-              subPath: nginx.conf
+      - name: nginx
+        image: nginx:latest
+        volumeMounts:
+        - name: index-html
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
       volumes:
-        - name: nginx-config
-          configMap:
-            name: nginx-config
+      - name: index-html
+        configMap:
+          name: nginx-index-html
