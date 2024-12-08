@@ -10,15 +10,26 @@ data:
     }
 
     http {
+        upstream php {
+            server php-service:9000;
+        }
+
         server {
             listen 80;
             server_name localhost;
 
             root /usr/share/nginx/html;
-            index index.html index.htm;
+            index index.php index.html index.htm;
 
             location / {
-                try_files $uri $uri/ =404;
+                try_files $uri $uri/ /index.php?$args;
+            }
+
+            location ~ \.php$ {
+                fastcgi_pass php-service:9000;  # Usamos el nombre del servicio PHP
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                include fastcgi_params;
             }
         }
     }
