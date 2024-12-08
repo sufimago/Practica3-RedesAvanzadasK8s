@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
+  labels:
+    app: redis
 spec:
   replicas: 1
   selector:
@@ -17,3 +19,28 @@ spec:
         image: redis:6.2
         ports:
         - containerPort: 6379
+      - name: redis-exporter
+        image: oliver006/redis_exporter:v1.52.0
+        env:
+        - name: REDIS_ADDR
+          value: "redis:6379"
+        ports:
+        - containerPort: 9121 # Puerto para métricas de redis_exporter
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9121" # Puerto de métricas del exportador
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+    name: redis
+  - port: 9121
+    targetPort: 9121
+    name: metrics
+  selector:
+    app: redis

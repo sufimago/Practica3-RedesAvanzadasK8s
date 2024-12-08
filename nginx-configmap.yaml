@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-config
+  namespace: default  # O el namespace que estés usando
 data:
   nginx.conf: |
     events {
@@ -11,8 +12,10 @@ data:
     http {
         server {
             listen 80;
-            listen [::]:80;
             server_name localhost;
+
+            root /usr/share/nginx/html;
+            index index.php index.html;
 
             location ~ \.php$ {
                 fastcgi_pass php-service:9000;
@@ -22,13 +25,7 @@ data:
             }
 
             location / {
-                root   /usr/share/nginx/html;
-                index  index.php index.html;
-            }
-
-            error_page 500 502 503 504 /50x.html;
-            location = /50x.html {
-                root   /usr/share/nginx/html;
+                try_files $uri $uri/ =404;
             }
         }
     }
