@@ -16,10 +16,10 @@ spec:
       - name: nginx
         image: nginx:latest
         volumeMounts:
-        - name: index-html
-          mountPath: /usr/share/nginx/html/index.html
-          subPath: index.html
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
       volumes:
-      - name: index-html
+      - name: nginx-config
         configMap:
-          name: nginx-index-html
+          name: nginx-config

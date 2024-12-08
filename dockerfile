@@ -1,18 +1,16 @@
-# Usar una imagen base de PHP con Apache
-FROM php:8.1-apache
+FROM nginx:latest
 
-# Instalar extensiones necesarias para MySQL
-RUN docker-php-ext-install mysqli
+RUN apt-get update && apt-get install -y \
+    php-fpm \
+    php-mysql
 
-# Copiar los archivos de la aplicación al contenedor
-COPY . /var/www/html/
+# Copia los archivos de configuración de Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Configurar permisos
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+# Copia el código fuente de la web
+COPY . /usr/share/nginx/html/
 
 # Exponer el puerto 80
 EXPOSE 80
 
-# Activar el módulo de reescritura de Apache
-RUN a2enmod rewrite
+CMD ["nginx", "-g", "daemon off;"]
