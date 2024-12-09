@@ -1,0 +1,79 @@
+# Ver los Pods en un Namespace
+kubectl get pods                         # Ver los pods en el namespace actual
+kubectl get pods -n <namespace>          # Ver los pods en un namespace específico
+
+# Ver los Servicios (Services)
+kubectl get services                     # Ver los servicios en el namespace actual
+kubectl get services -n <namespace>      # Ver los servicios en un namespace específico
+
+# Ver los Deployments
+kubectl get deployments                  # Ver los deployments en el namespace actual
+kubectl get deployments -n <namespace>   # Ver los deployments en un namespace específico
+
+# Ver los Namespaces
+kubectl get namespaces                   # Ver todos los namespaces
+
+# Ver los Logs de un Pod
+kubectl logs <pod-name>                  # Ver los logs de un pod
+kubectl logs <pod-name> -c <container-name>  # Ver los logs de un contenedor específico dentro de un pod
+kubectl logs -f <pod-name>               # Ver los logs en tiempo real
+
+# Acceder a un Contenedor (Bash)
+kubectl exec -it <pod-name> -- /bin/bash           # Acceder al bash del contenedor
+kubectl exec -it <pod-name> -c <container-name> -- /bin/bash  # Si el pod tiene múltiples contenedores
+kubectl exec -it <pod-name> -- sh                 # En caso de que el contenedor no tenga bash
+
+# Ver los Recursos de un Pod o Servicio
+kubectl describe pod <pod-name>        # Ver detalles completos de un pod
+kubectl describe service <service-name> # Ver detalles completos de un servicio
+
+# Crear un Pod o Deployment
+kubectl apply -f <file.yaml>            # Crear o actualizar un recurso
+kubectl create -f <file.yaml>           # Crear un recurso
+
+# Eliminar un Pod o Servicio
+kubectl delete pod <pod-name>           # Eliminar un pod específico
+kubectl delete service <service-name>   # Eliminar un servicio específico
+kubectl delete -f <file.yaml>           # Eliminar los recursos definidos en un archivo YAML
+
+# Obtener la Información de los Nodos
+kubectl get nodes                       # Ver los nodos del cluster
+kubectl describe node <node-name>       # Ver detalles completos de un nodo
+
+# Obtener el Estado de los Recursos
+kubectl get all -n <namespace>          # Ver todos los recursos (pods, servicios, deployments) en un namespace
+kubectl get pods -o wide                # Ver detalles extendidos de los pods (como las IPs de los pods)
+
+# Ver la Configuración del Contexto de Kubernetes
+kubectl config view                     # Ver la configuración de los contextos
+kubectl config current-context          # Ver el contexto actual
+kubectl config use-context <context-name>  # Cambiar al contexto especificado
+
+# Copiar Archivos Entre el Contenedor y tu Máquina Local
+kubectl cp <pod-name>:<container-path> <local-path>   # Copiar desde el contenedor a tu máquina
+kubectl cp <local-path> <pod-name>:<container-path>   # Copiar desde tu máquina al contenedor
+
+# Acceder al Dashboard (si está habilitado)
+kubectl proxy   # Inicia un proxy que te permite acceder al dashboard de Kubernetes
+
+# Obtener el Acceso a un Cluster Externo (kubeconfig)
+kubectl config view --raw  # Ver el archivo kubeconfig sin procesar
+
+# Comandos para Nginx (si estás usando un pod con Nginx)
+kubectl get pods -l app=nginx  # Ver los pods con la etiqueta "app=nginx"
+kubectl exec -it <nginx-pod-name> -- /bin/bash  # Acceder al bash de un contenedor Nginx
+kubectl logs <nginx-pod-name>  # Ver logs de un pod Nginx
+kubectl logs <nginx-pod-name> -c <nginx-container-name>  # Si hay varios contenedores en el pod
+
+# Comandos para Copiar Archivos entre Pods y Máquinas Locales
+kubectl cp <local-path> <pod-name>:<container-path>   # Copiar archivo de tu máquina al Pod
+kubectl cp <pod-name>:<container-path> <local-path>   # Copiar archivo del Pod a tu máquina local
+
+# Ver el Estado del Cluster
+kubectl cluster-info   # Información general sobre el cluster
+
+# Listar los Recursos en Formato YAML
+kubectl get <resource> -o yaml  # Ejemplo: kubectl get pods -o yaml
+
+# Ver las Versiones de kubectl y del API Server
+kubectl version
