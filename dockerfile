@@ -1,16 +1,20 @@
-FROM nginx:latest
+# Usa la imagen base de Python
+FROM python:3.9-slim
 
-RUN apt-get update && apt-get install -y \
-    php-fpm \
-    php-mysql
+# Establecer el directorio de trabajo
+WORKDIR /app
 
-# Copia los archivos de configuración de Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copiar el archivo de requisitos
+COPY requirements.txt /app/
 
-# Copia el código fuente de la web
-COPY . /usr/share/nginx/html/
+# Instalar dependencias
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Exponer el puerto 80
-EXPOSE 80
+# Copiar el código fuente
+COPY ./app /app/
 
-CMD ["nginx", "-g", "daemon off;"]
+# Exponer el puerto 5000 para la aplicación Flask
+EXPOSE 5000
+
+# Comando para ejecutar la aplicación Flask
+CMD ["python", "app.py"]

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+  labels:
+    app: flask
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+        - name: flask
+          image: flask-mysql-app2:latest  # La imagen que has creado para la app
+          imagePullPolicy: Never  # No es necesario un registro de contenedores
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MYSQL_HOST
+              value: "mysql-service"  # Referencia al servicio de MySQL
+            - name: MYSQL_USER
+              value: "root"
+            - name: MYSQL_PASSWORD
+              value: "pro-pass"  # La contraseña de root
+            - name: MYSQL_DB
+              value: "pro_db"
+            - name: REDIS_HOST
+              value: "redis-service"  # Referencia al servicio de Redis
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  ports:
+    - port: 5000
+  selector:
+    app: flask

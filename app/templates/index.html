@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <link rel="stylesheet" type="text/css" href="/app/static/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Gestión de Productos</h1>
+        </header>
+
+        <section>
+            <h2>Lista de Productos</h2>
+            <ul class="product-list">
+                {% for product in products %}
+                    <li class="product-item">
+                        <span class="product-name">{{ product.product_name }}</span>
+                        <span class="product-quantity">Cantidad: {{ product.product_quantity }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Agregar Producto</h2>
+            <form method="POST" action="/add" class="add-form">
+                <input type="text" name="product_name" placeholder="Nombre del producto" required>
+                <input type="number" name="product_quantity" placeholder="Cantidad" required>
+                <button type="submit">Agregar</button>
+            </form>
+        </section>
+    </div>
+</body>
+
+</html>
