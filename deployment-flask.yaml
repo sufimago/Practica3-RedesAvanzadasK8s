@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: flask
-          image: flask-mysql-app2:latest  # La imagen que has creado para la app
-          imagePullPolicy: Never  # No es necesario un registro de contenedores
+          image: sufimago/flask-app:latest  # La imagen que has creado para la app
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           env:
@@ -28,7 +28,7 @@ spec:
             - name: MYSQL_PASSWORD
               value: "pro-pass"  # La contraseña de root
             - name: MYSQL_DB
-              value: "pro_db"
+              value: "pro.db"
             - name: REDIS_HOST
               value: "redis-service"  # Referencia al servicio de Redis
 
