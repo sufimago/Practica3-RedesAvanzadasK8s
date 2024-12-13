@@ -30,7 +30,7 @@ jobs:
         run: black .
 
       - name: Run flake8 (code linter)
-        run: flake8 --ignore=E501,F841 .
+        run: flake8 --ignore=E501,F841,W503 .
 
   tests:
     name: Run Tests
