@@ -16,33 +16,41 @@ spec:
     spec:
       containers:
         - name: flask
-          image: sufimago/flask-app:latest  # La imagen que has creado para la app
+          image: sufimago/flask-app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
           env:
             - name: MYSQL_HOST
-              value: "mysql-service"  # Referencia al servicio de MySQL
+              value: "mysql-service"
             - name: MYSQL_USER
               value: "root"
             - name: MYSQL_PASSWORD
-              value: "pro-pass"  # La contraseña de root
+              value: "pro.pass"
             - name: MYSQL_DB
               value: "pro.db"
             - name: REDIS_HOST
-              value: "redis-service"  # Referencia al servicio de Redis
+              value: "redis-service"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: flask-service
-  annotations:
-    prometheus.io/scrape: "true"          # Habilitar scraping de métricas para Prometheus
-    prometheus.io/port: "5000"           # Puerto donde expone métricas Flask
 spec:
   ports:
     - port: 5000
-      targetPort: 5000
-      protocol: TCP
   selector:
     app: flask

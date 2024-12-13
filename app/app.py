@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import mysql.connector
 import redis
 import json
@@ -22,6 +22,26 @@ db_config = {
 
 # Configuración de Redis
 redis_client = redis.StrictRedis(host='redis-service', port=6379, db=0)
+
+# Health Check Endpoint
+@app.route('/health', methods=['GET'])
+def health_check():
+    try:
+        # Verificar conexión con MySQL
+        conn = mysql.connector.connect(**db_config)
+        conn.close()
+
+        # Verificar conexión con Redis
+        redis_client.ping()
+
+        # Si ambos están bien, el servidor está saludable
+        return jsonify(status='ok'), 200
+    except mysql.connector.Error as e:
+        return jsonify(status='error', message=f"MySQL Error: {str(e)}"), 500
+    except redis.exceptions.ConnectionError as e:
+        return jsonify(status='error', message=f"Redis Error: {str(e)}"), 500
+    except Exception as e:
+        return jsonify(status='error', message=f"Unexpected Error: {str(e)}"), 500
 
 @app.route('/')
 def index():
@@ -109,4 +129,3 @@ def add_product():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
-index()
