@@ -1,8 +1,6 @@
 import pytest
 from app import app  # Asegúrate de importar tu aplicación Flask aquí
-from flask import Flask, jsonify
 from unittest.mock import patch, MagicMock
-import pytest
 
 @pytest.fixture
 def client():

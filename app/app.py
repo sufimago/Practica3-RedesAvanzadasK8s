@@ -71,8 +71,11 @@ def index():
                 print(f"Datos recibidos de Redis: {cached_data}")
 
         # Retornamos los productos y el estado de conexión al template
-        return render_template('index.html', products=products, cached_products=cached_products,
-                               connection_status="conexión con éxito", insert_status=None, is_pro_env=True)
+        return render_template(
+            'index.html', products=products, 
+            cached_products=cached_products,
+            connection_status="conexión con éxito", 
+            insert_status=None, is_pro_env=True)
     except mysql.connector.Error as e:
         # En caso de error con MySQL
         return render_template('index.html', products=[], cached_products=[], 
@@ -80,9 +83,12 @@ def index():
                                insert_status=None, is_pro_env=False)
     except redis.exceptions.ConnectionError as e:
         # En caso de error con Redis
-        return render_template('index.html', products=[], cached_products=[], 
-                               connection_status="Conexión con Redis fallida.",
-                               insert_status=None, is_pro_env=False)
+        return render_template(
+            'index.html', products=[], 
+            cached_products=[], 
+            connection_status="Conexión con Redis fallida.",
+            insert_status=None, 
+            is_pro_env=False)
     finally:
         if conn and conn.is_connected():  # Verificar si conn está inicializado y conectado
             cursor.close()
