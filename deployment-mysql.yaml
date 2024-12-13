@@ -32,7 +32,7 @@ spec:
         image: prom/mysqld-exporter:v0.14.0
         env:
         - name: DATA_SOURCE_NAME
-          value: "root:$(MYSQL_ROOT_PASSWORD)@(127.0.0.1:3306)/"
+          value: "root:pro-pass@(127.0.0.1:3306)/"
         ports:
         - containerPort: 9104 # Puerto de métricas de mysqld-exporter
       volumes:

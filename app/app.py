@@ -2,8 +2,15 @@ from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 import redis
 import json
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
+
+# Inicializa el exportador Prometheus
+metrics = PrometheusMetrics(app)
+
+# Opcional: añade información sobre la aplicación como métricas
+metrics.info('app_info', 'Información de la aplicación Flask', version='1.0.0')
 
 # Configuración de MySQL
 db_config = {

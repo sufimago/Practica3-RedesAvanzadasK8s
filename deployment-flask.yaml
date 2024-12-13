@@ -31,14 +31,18 @@ spec:
               value: "pro.db"
             - name: REDIS_HOST
               value: "redis-service"  # Referencia al servicio de Redis
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: flask-service
+  annotations:
+    prometheus.io/scrape: "true"          # Habilitar scraping de métricas para Prometheus
+    prometheus.io/port: "5000"           # Puerto donde expone métricas Flask
 spec:
   ports:
     - port: 5000
+      targetPort: 5000
+      protocol: TCP
   selector:
     app: flask
