@@ -17,7 +17,7 @@ Antes de comenzar, asegúrate de tener las siguientes herramientas instaladas y 
 
 **Git**: Para gestionar el código fuente.
 
-## Diagrama/ Estructura del Proyecto
+## Estructura del Proyecto
 /project-root  
 │  
 ├── /app                    --> Código fuente de la aplicación Flask  
@@ -51,6 +51,63 @@ Antes de comenzar, asegúrate de tener las siguientes herramientas instaladas y 
 ├── secret.yaml             --> Archivos secretos (como contraseñas)  
 ├── practica3.pdf           --> Documento de la práctica  
 └── README.md               --> Este archivo
+
+## Diagrama
+                                   +-------------------+
+                                   |                   |
+                                   |      CLIENTE      |
+                                   |   (Usuario Web)   |
+                                   |                   |
+                                   +---------+---------+
+                                             |
+                                             v
+                              +-----------------------------+
+                              |                             |
+                              |         LoadBalancer        |
+                              |      (Ruteo de tráfico)     |
+                              |                             |
+                              +-----------+-----------------+
+                                          |
+                                          v
+                     +----------------------------------------------+
+                     |                                              |
+                     |                  FLASK (API)                 |
+                     |           (Aplicación web en Kubernetes)     |
+                     |                                              |
+                     +----------------------+-----------------------+
+                                          |
+                                          v
+                 +--------------------------+------------------------+
+                 |                                                   |
+                 |              MySQL (Base de datos)                |
+                 |    (Desplegada en Kubernetes con Persistent Vol)  |
+                 |                                                   |
+                 +-------------------+-------------------------------+
+                                         |
+                                         v
+                 +--------------------------+------------------------+
+                 |                                                   |
+                 |            Redis (Caché en memoria)               |
+                 |                                                   |
+                 +-------------------+-------------------------------+
+                                         |
+                                         v
+                  +----------------------------+---------------+
+                  |                           |                |
+                  |       Prometheus (Monitoreo y métricas)    |   
+                  |  (Monitorea Flask, MySQL, Redis y otros)   |    
+                  |      (Desplegado en Kubernetes)            |   
+                  |                           |                |  
+                  +--------------------------------------------+
+                                          |
+                                          v
+                                  +-------------------+
+                                  |                   |
+                                  |  GitHub Actions   |
+                                  |  (Pipeline CI/CD) |
+                                  |                   |
+                                  +-------------------+
+
 
 ## Installation
 
