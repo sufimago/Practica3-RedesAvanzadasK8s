@@ -3,6 +3,7 @@ import mysql.connector
 import redis
 import json
 from prometheus_flask_exporter import PrometheusMetrics
+import os
 
 app = Flask(__name__)
 
@@ -22,6 +23,7 @@ db_config = {
 
 # Configuración de Redis
 redis_client = redis.StrictRedis(host='redis-service', port=6379, db=0)
+pod_name = os.getenv("HOSTNAME", "Unknown Pod")
 
 # Health Check Endpoint
 @app.route('/health', methods=['GET'])
@@ -46,6 +48,7 @@ def health_check():
 @app.route('/')
 def index():
     print("inicio")
+     # Obtener el nombre del pod desde la variable de entorno
     conn = None  # Inicializar la variable conn
     try:
         # Conectar a la base de datos MySQL
@@ -75,7 +78,8 @@ def index():
             'index.html', products=products, 
             cached_products=cached_products,
             connection_status="conexión con éxito", 
-            insert_status=None, is_pro_env=True)
+            insert_status=None, is_pro_env=True,
+            pod_name=pod_name)
     except mysql.connector.Error as e:
         # En caso de error con MySQL
         return render_template('index.html', products=[], cached_products=[], 
