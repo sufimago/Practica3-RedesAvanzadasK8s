@@ -162,6 +162,74 @@ prometheus-service.yaml
 
 **/metrics** (GET): Endpoint que expone las métricas para Prometheus.
 
+## Test utilizados y sus outputs
+## Pruebas Unitarias
 
+Este proyecto incluye pruebas unitarias utilizando **pytest** para verificar el funcionamiento de la aplicación Flask. A continuación, se describen los tests utilizados y sus salidas esperadas.
 
+### 1. Test del Endpoint Principal (`/`)
+
+**Descripción:**  
+Este test verifica que la página principal (`/`) carga correctamente y que muestra un mensaje que indica el estado de la conexión con la base de datos o Redis.
+
+**Test:**
+
+```python
+def test_index(client):
+    """Probar la página principal"""
+    response = client.get('/')
+    assert response.status_code == 200
+    assert b'Conexion con exito' in response.data or b'Error con la base de datos' in response.data
+```
+**Resultado Esperado:**
+
+El código de estado de la respuesta debe ser **200 OK.**
+El contenido de la respuesta debe incluir una de las siguientes cadenas:
+"Conexion con exito"
+"Error con la base de datos"
+
+### 2. Test del Endpoint Health Check (/health)
+Descripción:
+Este test verifica que el endpoint de "Health Check" (/health) responde correctamente simulando las conexiones de MySQL y Redis.
+```python
+@patch('mysql.connector.connect')
+@patch('redis.StrictRedis.ping')
+def test_health_check(mock_redis_ping, mock_mysql_connect, client):
+    """Probar el endpoint de health check"""
+
+    # Crear un objeto mock para la conexión MySQL
+    mock_mysql_connection = MagicMock()
+    mock_mysql_connect.return_value = mock_mysql_connection  # Devuelve el objeto mock de conexión MySQL
+
+    # Simula una conexión exitosa de Redis
+    mock_redis_ping.return_value = True
+
+    response = client.get('/health')
+
+    # Imprimir los detalles de la respuesta para depurar el error
+    print(response.data)
+
+    # Verifica que la respuesta tenga el código 200
+    assert response.status_code == 200
+```
+
+**Resultado Esperado:**
+
+El código de estado de la respuesta debe ser **200 OK.**
+El contenido de la respuesta debe indicar que los servicios de MySQL y Redis están funcionando correctamente.
+Salida del Test (ejemplo):
+```bash
+b'{"status":"ok"}'
+```
+
+### Ejecución de los Tests
+Para ejecutar los tests, puedes utilizar el siguiente comando en la terminal:
+```bash
+pytest
+```
+
+Este comando ejecutará todas las pruebas definidas en los archivos que coincidan con el patrón 
+```bash
+test_*.py y mostrará el resultado en la consola.
+```
 
