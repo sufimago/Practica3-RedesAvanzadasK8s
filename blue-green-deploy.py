@@ -4,7 +4,7 @@ import time
 
 # Configuración inicial
 NEW_IMAGE = "sufimago/flask-app:green"  # Nueva imagen para la versión Green
-OLD_IMAGE = "sufimago/flask-app:latest"  # Imagen actual para la versión Blue
+OLD_IMAGE = "sufimago/flask-app:blue"  # Imagen actual para la versión Blue
 DEPLOYMENT_NAME = "flask-deployment"
 NAMESPACE = "default"
 TIMEOUT = 60
