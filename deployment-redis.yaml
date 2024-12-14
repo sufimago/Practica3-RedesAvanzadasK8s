@@ -32,15 +32,15 @@ kind: Service
 metadata:
   name: redis-service
   annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "9121" # Puerto de métricas del exportador
+    prometheus.io/scrape: "true"  # Habilita la recolección de métricas para Prometheus
+    prometheus.io/port: "9121"    # Puerto del exporter donde Prometheus obtiene las métricas
 spec:
   ports:
   - port: 6379
     targetPort: 6379
-    name: redis
-  - port: 9121
+    name: redis  # Puerto de Redis para la comunicación entre los pods
+  - port: 9121  # Puerto del Redis exporter para las métricas
     targetPort: 9121
-    name: metrics
+    name: metrics  # Puerto de métricas
   selector:
     app: redis

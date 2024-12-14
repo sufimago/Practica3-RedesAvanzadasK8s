@@ -29,3 +29,11 @@ data:
         static_configs:
         - targets:
           - localhost:9090
+
+      - job_name: "redis"
+      kubernetes_sd_configs:
+      - role: service
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_service_name]
+        action: keep
+        regex: redis-service    
