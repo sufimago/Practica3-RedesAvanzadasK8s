@@ -81,5 +81,4 @@ jobs:
       - name: Deployment instructions
         run: |
           echo "To deploy locally, run the following commands:"
-          echo "docker pull ${{ secrets.DOCKER_USERNAME }}/flask-app:latest"
-          echo "docker run -d -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/flask-app:latest"
+          echo "Follow the instructions in the README.md file."
