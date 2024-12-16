@@ -50,7 +50,9 @@ kind: Service
 metadata:
   name: flask-service
 spec:
+  type: NodePort
   ports:
     - port: 5000
+      nodePort: 30001
   selector:
     app: flask
